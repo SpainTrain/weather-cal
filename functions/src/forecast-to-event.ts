@@ -1,6 +1,6 @@
-import { ICalEventData } from 'ical-generator'
+import { ICalEventData, ICalEventBusyStatus } from 'ical-generator'
 import { weatherCodeToEmoji } from './code-to-emoji'
-import { OpenWeatherDay } from './types'
+import { Coordinates, OpenWeatherDay } from './types'
 
 const openWeatherAttribution =
   'Weather data provided by OpenWeather - https://openweathermap.org/'
@@ -8,11 +8,13 @@ const openWeatherAttribution =
 interface OpenWeatherDayToEventArgs {
   day: OpenWeatherDay
   locationFriendlyName: string
+  coordinates: Coordinates
 }
 
 export const openWeatherDayToEvent = ({
   day,
   locationFriendlyName,
+  coordinates,
 }: OpenWeatherDayToEventArgs): ICalEventData => {
   const start = new Date(day.dt * 1000)
   const tempLow = Math.round(day.temp.min)
@@ -32,5 +34,13 @@ export const openWeatherDayToEvent = ({
     allDay: true,
     description,
     summary,
+    busystatus: ICalEventBusyStatus.FREE,
+    location: {
+      title: locationFriendlyName,
+      geo: {
+        lat: coordinates.lat,
+        lon: coordinates.lon,
+      },
+    },
   }
 }

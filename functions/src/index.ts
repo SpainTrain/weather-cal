@@ -41,7 +41,11 @@ export const forecast = onRequest(
 
     forecast.daily.forEach((day) =>
       calendar.createEvent(
-        openWeatherDayToEvent({ day, locationFriendlyName: friendlyName }),
+        openWeatherDayToEvent({
+          day,
+          locationFriendlyName: friendlyName,
+          coordinates: { lat, lon },
+        }),
       ),
     )
 
