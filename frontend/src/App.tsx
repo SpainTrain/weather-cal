@@ -10,6 +10,7 @@ import {
   Container,
   CssBaseline,
   Divider,
+  Grid,
   Grid2,
   LinearProgress,
   Link,
@@ -23,6 +24,7 @@ import { GitHub } from '@mui/icons-material'
 
 import WeatherCalLogo from '/logo.png'
 import RaodixLogo from '/raodix-logo.png'
+import OpenWeatherLogo from '/open-weather-logo.png'
 
 import { useFirebaseAuth, useLogout } from './firebase'
 import { initFullstory } from './fullstory'
@@ -98,26 +100,56 @@ function App() {
             paddingBottom: '2em',
           }}
         >
-          <Grid2 size={6} sx={{ paddingTop: '1em' }}>
-            <Link
-              href="https://github.com/SpainTrain/weather-cal"
-              target="_blank"
-              rel="noopener"
-              variant="h5"
-              underline="hover"
-            >
-              <GitHub /> <span>Star on Github</span>
-            </Link>
-          </Grid2>
-          <Grid2 size={6}>
+          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
             <Box
               component="img"
               src={RaodixLogo}
               alt="Raodix Logo"
               sx={{
-                maxHeight: '4em',
+                maxHeight: '24vh',
               }}
             />
+          </Grid2>
+          <Grid2
+            container
+            size={{ xs: 12, sm: 6, md: 4 }}
+            sx={{ alignItems: 'center' }}
+          >
+            <Grid2 size={12} sx={{ padding: '2vh 0 4vh 0' }}>
+              <Link
+                href="https://github.com/SpainTrain/weather-cal"
+                target="_blank"
+                rel="noopener"
+                variant="h4"
+                underline="hover"
+              >
+                <GitHub /> <span>Star on Github</span>
+              </Link>
+            </Grid2>
+          </Grid2>
+          <Grid2
+            container
+            size={{ xs: 12, sm: 6, md: 4 }}
+            sx={{ alignItems: 'center' }}
+          >
+            <Grid2 size={12}>
+              <Typography color={theme.palette.grey[300]}>
+                Weather data provided by
+              </Typography>
+              <Link
+                href="https://openweathermap.org/"
+                target="_blank"
+                rel="noopener"
+                underline="none"
+              >
+                <Box
+                  component="img"
+                  src={OpenWeatherLogo}
+                  alt="Open Weather Logo"
+                  sx={{ height: '16vh' }}
+                />
+              </Link>
+            </Grid2>
           </Grid2>
         </Grid2>
       </CssBaseline>

@@ -40,7 +40,9 @@ export const forecast = onRequest(
     })
 
     forecast.daily.forEach((day) =>
-      calendar.createEvent(openWeatherDayToEvent(day)),
+      calendar.createEvent(
+        openWeatherDayToEvent({ day, locationFriendlyName: friendlyName }),
+      ),
     )
 
     logger.info('completed', { structuredData: true })
