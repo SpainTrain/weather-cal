@@ -20,7 +20,7 @@ import {
   setDoc,
 } from 'firebase/firestore'
 
-import { Units, UserRecord, UserRecordSchema } from './types'
+import { UserRecord, UserRecordSchema } from './types'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -143,6 +143,14 @@ export const useUserRecord = (uid: string) => {
       }),
     [uid],
   )
+
+  // For first time user experience (i.e., user record does not exist)
+  useEffect(() => {
+    getUserRecord(uid).then((userRecord) => {
+      setUserRecord(userRecord)
+      setLoading(false)
+    })
+  }, [uid])
 
   const updateUserRecord = (userRecord: UserRecord) => {
     setUpdating(true)

@@ -30,14 +30,15 @@ export const getWeatherForecast = async ({
     logger.info('Found cached entry', {
       lat,
       lon,
+      units,
       date: existingForecast.lastUpdated.toDateString(),
     })
     return existingForecast.openWeatherData
   }
 
   // API call to open weather
-  logger.info('Fetching new forecast', { lat, lon })
-  const forecast = await fetchOpenWeather({ openWeatherKey, lat, lon })
+  logger.info('Fetching new forecast', { lat, lon, units })
+  const forecast = await fetchOpenWeather({ openWeatherKey, lat, lon, units })
   // Save result to cache
   await saveForecast({
     lastUpdated: new Date(),

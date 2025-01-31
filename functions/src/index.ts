@@ -51,6 +51,7 @@ export const forecast = onRequest(
           day,
           locationFriendlyName: friendlyName,
           coordinates: { lat, lon },
+          units,
         }),
       ),
     )
