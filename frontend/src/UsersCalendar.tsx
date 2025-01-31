@@ -2,17 +2,14 @@ import { isString } from 'lodash'
 import { useCallback } from 'react'
 
 import {
-  Alert,
   Box,
   Button,
   Grid2,
   InputAdornment,
   LinearProgress,
-  Link,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
-  useTheme,
 } from '@mui/material'
 
 import { Check, ContentCopy } from '@mui/icons-material'
@@ -21,14 +18,13 @@ import { useCopyToClipboard } from './hooks'
 import { useUserRecord } from './firebase'
 import { LocationWidget } from './LocationWidget'
 import { Location, Units } from './types'
+import { CalendarDirections } from './CalendarDirections'
 
 interface UsersCalendarProps {
   uid: string
 }
 
 export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
-  const theme = useTheme()
-
   const { userRecord, loading, updateUserRecord, updating } = useUserRecord(uid)
 
   const units = userRecord?.units ?? 'imperial'
@@ -58,116 +54,102 @@ export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
     <LinearProgress />
   ) : (
     <Grid2 container spacing={2}>
-      <Grid2 size={{ xs: 0, sm: 1, md: 2, lg: 3 }}></Grid2>
-      <Grid2 size={{ xs: 12, sm: 10, md: 8, lg: 6 }}>
+      <Grid2 size={{ xs: 0, sm: 1, md: 1, lg: 2, xl: 3 }}></Grid2>
+      <Grid2 size={{ xs: 12, sm: 10, md: 10, lg: 8, xl: 6 }}>
         {userRecord ? (
-          <Grid2
-            container
-            alignItems="center"
-            spacing={2}
-            sx={{ marginTop: '2em' }}
+          <Box
+            sx={{
+              paddingLeft: { xs: '1em', sm: 0 },
+            }}
           >
             <Grid2
-              size={{
-                xs: 8,
-                sm: 8,
-                md: 9,
-                lg: 9,
-                xl: 10,
-              }}
-            >
-              <TextField
-                fullWidth
-                label="Location"
-                variant="standard"
-                value={userRecord?.location.friendlyName}
-                slotProps={{
-                  input: {
-                    readOnly: true,
-                  },
-                }}
-              />
-            </Grid2>
-            <Grid2
               container
-              size={{
-                xs: 4,
-                sm: 4,
-                md: 3,
-                lg: 3,
-                xl: 2,
-              }}
-              sx={{ justifyContent: 'center' }}
+              alignItems="center"
+              spacing={2}
+              sx={{ marginTop: '2em' }}
             >
-              <ToggleButtonGroup
-                color="secondary"
-                exclusive
-                value={units}
-                onChange={handleToggleUnits}
-                aria-label="Units"
-                size="large"
-                disabled={updating}
-              >
-                <ToggleButton
-                  value="imperial"
-                  aria-label="Imperial - Fahrenheit"
-                >
-                  ° F
-                </ToggleButton>
-                <ToggleButton value="metric" aria-label="Metric - Celsius">
-                  ° C
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Grid2>
-            <Grid2 size={12}>
-              <TextField
-                fullWidth
-                label="Calendar URL"
-                variant="standard"
-                value={webcalUrl}
-                slotProps={{
-                  input: {
-                    readOnly: true,
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Button
-                          startIcon={urlCopied ? <Check /> : <ContentCopy />}
-                          color={urlCopied ? 'success' : 'primary'}
-                          onClick={handleCopyUrl}
-                          sx={{ minWidth: '7em' }}
-                        >
-                          {urlCopied ? 'Copied' : 'Copy'}
-                        </Button>
-                      </InputAdornment>
-                    ),
-                  },
+              <Grid2
+                size={{
+                  xs: 8,
+                  sm: 8,
+                  md: 9,
+                  lg: 9,
+                  xl: 10,
                 }}
-              />
-              <Grid2>
-                <Alert
-                  variant="outlined"
-                  severity="info"
-                  sx={{
-                    marginTop: '2em',
-                    fontSize: theme.typography.h6.fontSize,
+              >
+                <TextField
+                  fullWidth
+                  label="Location"
+                  variant="standard"
+                  value={userRecord?.location.friendlyName}
+                  slotProps={{
+                    input: {
+                      readOnly: true,
+                    },
                   }}
+                />
+              </Grid2>
+              <Grid2
+                container
+                size={{
+                  xs: 4,
+                  sm: 4,
+                  md: 3,
+                  lg: 3,
+                  xl: 2,
+                }}
+                sx={{ justifyContent: 'center' }}
+              >
+                <ToggleButtonGroup
+                  color="secondary"
+                  exclusive
+                  value={units}
+                  onChange={handleToggleUnits}
+                  aria-label="Units"
+                  size="large"
+                  disabled={updating}
                 >
-                  <span>
-                    To add your calendar to Google Calendar, paste the above URL
-                    into &nbsp;
-                  </span>
-                  <Link
-                    underline="hover"
-                    target="_blank"
-                    rel="noopener"
-                    href="https://calendar.google.com/calendar/u/0/r/settings/addbyurl"
+                  <ToggleButton
+                    value="imperial"
+                    aria-label="Imperial - Fahrenheit"
                   >
-                    https://calendar.google.com/calendar/u/0/r/settings/addbyurl
-                  </Link>
-                </Alert>
+                    ° F
+                  </ToggleButton>
+                  <ToggleButton value="metric" aria-label="Metric - Celsius">
+                    ° C
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </Grid2>
+              <Grid2 size={12}>
+                <TextField
+                  fullWidth
+                  label="Calendar URL"
+                  variant="standard"
+                  value={webcalUrl}
+                  slotProps={{
+                    input: {
+                      readOnly: true,
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Button
+                            startIcon={urlCopied ? <Check /> : <ContentCopy />}
+                            color={urlCopied ? 'success' : 'primary'}
+                            onClick={handleCopyUrl}
+                            sx={{ minWidth: '7em' }}
+                          >
+                            {urlCopied ? 'Copied' : 'Copy'}
+                          </Button>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                />
               </Grid2>
             </Grid2>
-          </Grid2>
+            <Box>
+              <CalendarDirections webcalUrl={webcalUrl} />
+            </Box>
+          </Box>
         ) : null}
         <Box
           sx={{
@@ -185,7 +167,7 @@ export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
           />
         </Box>
       </Grid2>
-      <Grid2 size={{ xs: 0, sm: 1, md: 2, lg: 3 }}></Grid2>
+      <Grid2 size="grow"></Grid2>
     </Grid2>
   )
 }
