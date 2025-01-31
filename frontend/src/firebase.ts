@@ -21,6 +21,7 @@ import {
 } from 'firebase/firestore'
 
 import { UserRecord, UserRecordSchema } from './types'
+import { useFullstoryIdentify } from './fullstory'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -61,11 +62,19 @@ export const useFirebaseAuth = () => {
   const auth = getFirebaseAuth()
   const [user, setUser] = useState(auth.currentUser)
   const [loading, setLoading] = useState(true)
+  const { fullstoryIdentify } = useFullstoryIdentify()
 
   useEffect(() =>
     onAuthStateChanged(auth, (authUser) => {
       if (authUser?.uid !== user?.uid) {
         setUser(authUser)
+        if (authUser !== null) {
+          fullstoryIdentify({
+            uid: authUser.uid,
+            email: authUser.email ?? undefined,
+            displayName: authUser.displayName ?? undefined,
+          })
+        }
       }
       if (loading) {
         setLoading(false)
