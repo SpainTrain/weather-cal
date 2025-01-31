@@ -7,6 +7,7 @@ import {
   Coordinates,
   ForecastRecord,
   ForecastRecordSchema,
+  Units,
   UserRecordSchema,
 } from './types'
 
@@ -31,38 +32,54 @@ export const getUserRecord = async (uid: string) => {
   return userRecord
 }
 
-const getForecastId = ({ lat, lon }: Coordinates) => {
-  const data = `${roundToFour(lat)},${roundToFour(lon)}`
-  // URL-safe base64
-  const hash = createHash('sha256').update(data).digest('base64url')
-  // Trim to 28 chars (default firestore ID length)
-  return hash.substring(0, 28)
+interface GetForecastArgs {
+  coordinates: Coordinates
+  units: Units
 }
 
-export const getExistingForecast = async ({ lat, lon }: Coordinates) => {
+const getForecastId = ({
+  units,
+  coordinates: { lat, lon },
+}: GetForecastArgs) => {
+  const data = `${roundToFour(lat)},${roundToFour(lon)}`
+
+  // URL-safe base64
+  const hash = createHash('sha256').update(data).digest('base64url')
+
+  // Trim to 25 chars (default firestore ID length is 28)
+  const trimmedHash = hash.substring(0, 25)
+  const unitPrefix = units.substring(0, 3)
+
+  return `${unitPrefix}${trimmedHash}`
+}
+
+export const getExistingForecast = async (getForecastArgs: GetForecastArgs) => {
   const db = getDB()
-  const locationId = getForecastId({ lat, lon })
+  const locationId = getForecastId(getForecastArgs)
   const locationsCol = db.collection('forecasts')
   const locationRef = locationsCol.doc(locationId)
   const data = (await locationRef.get()).data()
   return data === undefined
     ? null
     : ForecastRecordSchema.parse({
+        ...data,
         lastUpdated: (data.lastUpdated as Timestamp).toDate(),
-        openWeatherData: data.openWeatherData,
       })
 }
 
 export const saveForecast = async (forecast: ForecastRecord) => {
   const db = getDB()
   const locationId = getForecastId({
-    lat: forecast.openWeatherData.lat,
-    lon: forecast.openWeatherData.lon,
+    units: forecast.units,
+    coordinates: {
+      lat: forecast.openWeatherData.lat,
+      lon: forecast.openWeatherData.lon,
+    },
   })
   const locationsCol = db.collection('forecasts')
   const locationRef = locationsCol.doc(locationId)
   await locationRef.set({
+    ...forecast,
     lastUpdated: Timestamp.fromDate(forecast.lastUpdated),
-    openWeatherData: forecast.openWeatherData,
   })
 }

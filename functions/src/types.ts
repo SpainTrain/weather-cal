@@ -1,5 +1,9 @@
 import { z } from 'zod'
 
+const UnitsSchema = z.enum(['imperial', 'metric'])
+
+export type Units = z.infer<typeof UnitsSchema>
+
 export interface Coordinates {
   lat: number
   lon: number
@@ -36,6 +40,7 @@ export type OpenWeatherData = z.infer<typeof OpenWeatherDataSchema>
 
 export const ForecastRecordSchema = z.object({
   lastUpdated: z.date(),
+  units: UnitsSchema,
   openWeatherData: OpenWeatherDataSchema,
 })
 
@@ -51,6 +56,7 @@ export type Location = z.infer<typeof LocationSchema>
 
 export const UserRecordSchema = z.object({
   location: LocationSchema,
+  units: UnitsSchema,
 })
 
 export type UserRecord = z.infer<typeof UserRecordSchema>

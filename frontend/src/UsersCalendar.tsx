@@ -1,18 +1,26 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 import {
   Alert,
   Box,
+  Divider,
   Grid2,
   LinearProgress,
   Link,
+  Paper,
+  Stack,
+  Switch,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
   useTheme,
 } from '@mui/material'
 
 import { useUserRecord } from './firebase'
 import { LocationWidget } from './LocationWidget'
-import { Location } from './types'
+import { Location, Units } from './types'
+import { isString } from 'lodash'
 
 interface UsersCalendarProps {
   uid: string
@@ -23,9 +31,20 @@ export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
 
   const { userRecord, loading, updateUserRecord, updating } = useUserRecord(uid)
 
-  const updateLocation = useCallback(
+  const units = userRecord?.units ?? 'imperial'
+
+  const handleToggleUnits = useCallback(
+    (_: unknown, newUnits: Units) => {
+      if (isString(newUnits) && newUnits !== units && userRecord !== null) {
+        updateUserRecord({ units: newUnits, location: userRecord.location })
+      }
+    },
+    [userRecord],
+  )
+
+  const handleUpdateLocation = useCallback(
     (location: Location) => {
-      updateUserRecord({ location })
+      updateUserRecord({ location, units })
     },
     [updateUserRecord],
   )
@@ -45,7 +64,15 @@ export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
             spacing={2}
             sx={{ marginTop: '2em' }}
           >
-            <Grid2 size={12}>
+            <Grid2
+              size={{
+                xs: 8,
+                sm: 8,
+                md: 9,
+                lg: 9,
+                xl: 10,
+              }}
+            >
               <TextField
                 fullWidth
                 label="Location"
@@ -57,6 +84,37 @@ export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
                   },
                 }}
               />
+            </Grid2>
+            <Grid2
+              container
+              size={{
+                xs: 4,
+                sm: 4,
+                md: 3,
+                lg: 3,
+                xl: 2,
+              }}
+              sx={{ justifyContent: 'center' }}
+            >
+              <ToggleButtonGroup
+                color="secondary"
+                exclusive
+                value={units}
+                onChange={handleToggleUnits}
+                aria-label="Units"
+                size="large"
+                disabled={updating}
+              >
+                <ToggleButton
+                  value="imperial"
+                  aria-label="Imperial - Fahrenheit"
+                >
+                  ° F
+                </ToggleButton>
+                <ToggleButton value="metric" aria-label="Metric - Celsius">
+                  ° C
+                </ToggleButton>
+              </ToggleButtonGroup>
             </Grid2>
             <Grid2 size={12}>
               <TextField
@@ -107,7 +165,7 @@ export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
             currentLocation={userRecord?.location}
             googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
             googleMapsMapId={import.meta.env.VITE_GOOGLE_MAPS_MAP_ID}
-            updateLocation={updateLocation}
+            updateLocation={handleUpdateLocation}
             updating={updating}
           />
         </Box>

@@ -28,11 +28,17 @@ export const forecast = onRequest(
   async (request, response) => {
     const uid = z.string().min(1).parse(request.query['calid'])
     const userRecord = await getUserRecord(uid)
+    const { units } = userRecord
     const { friendlyName, lat, lon } = userRecord.location
 
     const openWeatherKey = openWeatherKeySecret.value()
 
-    const forecast = await getWeatherForecast({ openWeatherKey, lat, lon })
+    const forecast = await getWeatherForecast({
+      openWeatherKey,
+      lat,
+      lon,
+      units,
+    })
 
     const calendar = ical({
       method: ICalCalendarMethod.PUBLISH,

@@ -66,6 +66,8 @@ export const LocationWidget = ({
     currentLocation?.lat === selectedPlace?.geometry?.location?.lat() &&
     currentLocation?.lon === selectedPlace?.geometry?.location?.lng()
 
+  const hideUpdateButton = selectedPlace === null || locMatchesSelectedPlace
+
   return (
     <APIProvider apiKey={googleMapsApiKey}>
       <Map
@@ -85,11 +87,11 @@ export const LocationWidget = ({
           />
 
           <Box sx={{ marginTop: '1em' }}>
-            {updating ? (
+            {updating && !hideUpdateButton ? (
               <CircularProgress />
             ) : (
               <Button
-                disabled={selectedPlace === null || locMatchesSelectedPlace}
+                disabled={hideUpdateButton}
                 variant="contained"
                 onClick={handleUpdateLocation}
               >

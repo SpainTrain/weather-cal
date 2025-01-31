@@ -1,4 +1,4 @@
-import { once } from 'lodash'
+import { isEqual, once } from 'lodash'
 import { useEffect, useState } from 'react'
 
 import { initializeApp } from 'firebase/app'
@@ -11,15 +11,16 @@ import {
   signInWithRedirect,
 } from 'firebase/auth'
 import {
-  getFirestore,
-  connectFirestoreEmulator,
   collection,
-  getDoc,
+  connectFirestoreEmulator,
   doc,
+  getDoc,
+  getFirestore,
+  onSnapshot,
   setDoc,
 } from 'firebase/firestore'
 
-import { UserRecord, UserRecordSchema } from './types'
+import { Units, UserRecord, UserRecordSchema } from './types'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -128,12 +129,20 @@ export const useUserRecord = (uid: string) => {
   const [loading, setLoading] = useState(true)
   const [updating, setUpdating] = useState(false)
 
-  useEffect(() => {
-    getUserRecord(uid).then((userRecord) => {
-      setUserRecord(userRecord)
-      setLoading(false)
-    })
-  }, [uid])
+  const db = getFirebaseFirestore()
+  useEffect(
+    () =>
+      onSnapshot(doc(db, 'users', uid), (doc) => {
+        const updatedUserRecord = UserRecordSchema.parse(doc.data())
+        if (!isEqual(updateUserRecord, userRecord)) {
+          setUserRecord(updatedUserRecord)
+        }
+        if (loading) {
+          setLoading(false)
+        }
+      }),
+    [uid],
+  )
 
   const updateUserRecord = (userRecord: UserRecord) => {
     setUpdating(true)
