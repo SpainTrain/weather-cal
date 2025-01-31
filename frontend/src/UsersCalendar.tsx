@@ -1,9 +1,12 @@
+import { isString } from 'lodash'
 import { useCallback } from 'react'
 
 import {
   Alert,
   Box,
+  Button,
   Grid2,
+  InputAdornment,
   LinearProgress,
   Link,
   TextField,
@@ -12,10 +15,12 @@ import {
   useTheme,
 } from '@mui/material'
 
+import { Check, ContentCopy } from '@mui/icons-material'
+
+import { useCopyToClipboard } from './hooks'
 import { useUserRecord } from './firebase'
 import { LocationWidget } from './LocationWidget'
 import { Location, Units } from './types'
-import { isString } from 'lodash'
 
 interface UsersCalendarProps {
   uid: string
@@ -45,6 +50,9 @@ export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
   )
 
   const webcalUrl = `${location.protocol}//${location.host}/forecast?calid=${uid}`
+
+  const { copied: urlCopied, copyToClipboard: handleCopyUrl } =
+    useCopyToClipboard(webcalUrl)
 
   return loading ? (
     <LinearProgress />
@@ -120,6 +128,18 @@ export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
                 slotProps={{
                   input: {
                     readOnly: true,
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Button
+                          startIcon={urlCopied ? <Check /> : <ContentCopy />}
+                          color={urlCopied ? 'success' : 'primary'}
+                          onClick={handleCopyUrl}
+                          sx={{ minWidth: '7em' }}
+                        >
+                          {urlCopied ? 'Copied' : 'Copy'}
+                        </Button>
+                      </InputAdornment>
+                    ),
                   },
                 }}
               />
