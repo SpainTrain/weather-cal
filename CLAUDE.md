@@ -4,7 +4,7 @@ Firebase app serving subscribable weather-forecast calendars (iCal). Live at
 [calendars.raodix.com](https://calendars.raodix.com). Two **independent** npm
 packages — there is no root package.json, no workspaces:
 
-- `functions/` — Cloud Functions Gen 2 (Node 22, CommonJS TypeScript 4.9).
+- `functions/` — Cloud Functions Gen 2 (Node 22, CommonJS TypeScript 5.9).
   One HTTP function, `forecast`: `GET /forecast?calid=<uid>` returns an `.ics`
   calendar. Flow: `index.ts` → `getUserRecord` (Firestore) →
   `getWeatherForecast` (Firestore day-cache, else OpenWeather One Call 3.0) →
@@ -53,13 +53,14 @@ Run inside the relevant package (`cd functions` or `cd frontend`):
 
 ## Gotchas
 
-- `functions/` pins `@types/node` to `~22.10.7`: newer majors use syntax
-  TypeScript 4.9 cannot parse. If a Renovate bump of `@types/node` or
-  `typescript` fails the functions build, this is why.
-- `functions/.eslintrc.js` is type-aware (`parserOptions.project`) and ignores
-  `/test/**/*` — test files belong to no tsconfig project and would crash lint.
-- `functions/vitest.config.mts` is deliberately `.mts` so functions lint
-  (`eslint --ext .js,.ts .`) skips it.
+- `functions/` keeps `@types/node` on the major matching the Node 22 runtime
+  (`~22.x`). Majors beyond the runtime (v26+) have historically broken the
+  build; let CI be the judge on any `@types/node` bump.
+- Both packages use ESLint flat config (`eslint.config.*`). The functions
+  config ignores `lib`, `generated`, and `test` — test files belong to no
+  tsconfig project and must stay out of type-aware linting.
+- `functions/eslint.config.mjs` limits linting to `**/*.ts`, so
+  `vitest.config.mts` is intentionally not linted.
 - Rules tests need Java + the Firebase CLI (v13 pinned in CI) and read
   `firestore.rules` from the repo root.
 - `openweather-api-node` and `firebase-functions-test` are unused deps kept to

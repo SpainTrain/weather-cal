@@ -36,9 +36,9 @@ first). Your job: process open Renovate PRs safely and report crisply.
 
 ## Repo-specific risk list
 
-- `@types/node` or `typescript` in `functions/`: TS is pinned at 4.9 and
-  `@types/node` at `~22.10.7` because newer `@types/node` majors don't parse
-  under TS 4.9. Bumps here likely break the functions build — expect it.
+- `@types/node` in `functions/`: keep it on the major matching the Node 22
+  runtime (`~22.x`); treat bumps to a major beyond the runtime (v26+) as
+  needs-human. The functions build (`tsc`) is the decisive check.
 - `firebase` (frontend) and `@firebase/rules-unit-testing` must move together
   (v11 ↔ v4, v12 ↔ v5). A major of one without the other fails `npm ci`.
 - `vitest` and `@vitest/coverage-v8` must be the same version — merge such
@@ -51,6 +51,9 @@ first). Your job: process open Renovate PRs safely and report crisply.
   wiring, but read release notes for runtime/deploy changes the tests can't see.
 - Unused deps `openweather-api-node` and `firebase-functions-test`: updates to
   these are zero-risk; note that removing them entirely is the better fix.
+- ESLint majors: both packages now use flat config (`eslint.config.*`), so
+  majors are mechanical — but confirm plugin peer ranges (typescript-eslint,
+  react plugins) declare support for the new ESLint major before merging.
 - GitHub Actions bumps (`.github/workflows/`): verify the new version ref
   actually exists upstream (`gh api repos/<owner>/<action>/git/ref/tags/<tag>`),
   and if a bump changes a pinned commit SHA, confirm the SHA matches the
