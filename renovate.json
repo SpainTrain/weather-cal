@@ -2,5 +2,12 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "labels": ["dependencies"],
-  "lockFileMaintenance": { "enabled": true }
+  "lockFileMaintenance": { "enabled": true },
+  "packageRules": [
+    {
+      "description": "@mui/lab -dev.* nightly snapshots sort above -beta.* in semver but are older channel builds — never treat them as upgrades",
+      "matchPackageNames": ["@mui/lab"],
+      "allowedVersions": "!/-dev\\./"
+    }
+  ]
 }
