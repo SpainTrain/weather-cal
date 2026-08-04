@@ -1,5 +1,7 @@
 # Weather Calendar
 
+[![CI](https://github.com/SpainTrain/weather-cal/actions/workflows/ci.yml/badge.svg)](https://github.com/SpainTrain/weather-cal/actions/workflows/ci.yml)
+
 Use for free at [https://calendars.raodix.com](https://calendars.raodix.com)
 
 To run your own version, here are the high level steps:
@@ -13,3 +15,20 @@ If there is interest in more specific directions to run your own, feel free to o
 Report bugs via Github issues.
 
 PRs Welcome!
+
+## Development
+
+This repo has two independent npm packages: `functions/` and `frontend/`. Run tests with:
+
+```
+cd functions && npm ci && npm test
+cd frontend && npm ci && npm test
+```
+
+The Firestore security rules have their own emulator-backed suite (requires Java and the Firebase CLI):
+
+```
+firebase emulators:exec --only firestore "npm --prefix frontend run test:rules"
+```
+
+CI runs lint, build, and tests for both packages plus the rules suite on every push and PR, so a green check on a Renovate PR means it's safe to merge.
