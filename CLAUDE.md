@@ -36,6 +36,8 @@ Run inside the relevant package (`cd functions` or `cd frontend`):
   suite on every push/PR. Green CI on a Renovate PR is the merge signal.
 - Renovate PRs: use the `renovate-maintainer` agent (see `.claude/agents/`).
   Merging is deliberate — no automerge is configured.
+- Before deploying, run the manual checklist in `docs/manual-testing.md` —
+  deploy functions first, verify `/forecast`, then hosting.
 
 ## Testing conventions
 
