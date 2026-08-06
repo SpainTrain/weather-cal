@@ -3,7 +3,7 @@ import {
   Box,
   Button,
   Divider,
-  Grid2,
+  Grid,
   List,
   ListItem,
   ListItemAvatar,
@@ -64,14 +64,14 @@ export const Login = () => {
 
   return (
     <Box sx={{ flexGrow: 1, alignContent: 'center', paddingTop: '2em' }}>
-      <Grid2 container spacing={2}>
-        <Grid2
+      <Grid container spacing={2}>
+        <Grid
           size={{
             xs: 0,
             sm: 1,
           }}
         />
-        <Grid2
+        <Grid
           size={{
             xs: 12,
             sm: 12,
@@ -93,8 +93,8 @@ export const Login = () => {
           </Box>
           <Divider />
           <MarketingBullets />
-        </Grid2>
-        <Grid2
+        </Grid>
+        <Grid
           size={{
             xs: 12,
             sm: 12,
@@ -112,8 +112,8 @@ export const Login = () => {
               }}
             />
           </Box>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Box>
   )
 }

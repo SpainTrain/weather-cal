@@ -10,7 +10,7 @@ import {
   Container,
   CssBaseline,
   Divider,
-  Grid2,
+  Grid,
   LinearProgress,
   Link,
   ThemeProvider,
@@ -91,7 +91,7 @@ function App() {
 
           <Divider />
 
-          <Grid2
+          <Grid
             container
             spacing={2}
             sx={{
@@ -102,7 +102,7 @@ function App() {
               paddingBottom: '2em',
             }}
           >
-            <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
               <Box
                 component="img"
                 src={RaodixLogo}
@@ -111,13 +111,13 @@ function App() {
                   maxHeight: '24vh',
                 }}
               />
-            </Grid2>
-            <Grid2
+            </Grid>
+            <Grid
               container
               size={{ xs: 12, sm: 6, md: 4 }}
               sx={{ alignItems: 'center' }}
             >
-              <Grid2 size={12} sx={{ padding: '2vh 0 4vh 0' }}>
+              <Grid size={12} sx={{ padding: '2vh 0 4vh 0' }}>
                 <Link
                   href="https://github.com/SpainTrain/weather-cal"
                   target="_blank"
@@ -127,14 +127,14 @@ function App() {
                 >
                   <GitHub /> <span>Star on Github</span>
                 </Link>
-              </Grid2>
-            </Grid2>
-            <Grid2
+              </Grid>
+            </Grid>
+            <Grid
               container
               size={{ xs: 12, sm: 6, md: 4 }}
               sx={{ alignItems: 'center' }}
             >
-              <Grid2 size={12}>
+              <Grid size={12}>
                 <Typography color={theme.palette.grey[300]}>
                   Weather data provided by
                 </Typography>
@@ -151,9 +151,9 @@ function App() {
                     sx={{ height: '16vh' }}
                   />
                 </Link>
-              </Grid2>
-            </Grid2>
-          </Grid2>
+              </Grid>
+            </Grid>
+          </Grid>
         </SnackbarProvider>
       </CssBaseline>
     </ThemeProvider>

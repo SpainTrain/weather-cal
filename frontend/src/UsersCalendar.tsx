@@ -4,7 +4,7 @@ import { useCallback } from 'react'
 import {
   Box,
   Button,
-  Grid2,
+  Grid,
   InputAdornment,
   LinearProgress,
   TextField,
@@ -53,22 +53,21 @@ export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
   return loading ? (
     <LinearProgress />
   ) : (
-    <Grid2 container spacing={2}>
-      <Grid2 size={{ xs: 0, sm: 1, md: 1, lg: 2, xl: 3 }}></Grid2>
-      <Grid2 size={{ xs: 12, sm: 10, md: 10, lg: 8, xl: 6 }}>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 0, sm: 1, md: 1, lg: 2, xl: 3 }}></Grid>
+      <Grid size={{ xs: 12, sm: 10, md: 10, lg: 8, xl: 6 }}>
         {userRecord ? (
           <Box
             sx={{
               paddingLeft: { xs: '1em', sm: 0 },
             }}
           >
-            <Grid2
+            <Grid
               container
-              alignItems="center"
               spacing={2}
-              sx={{ marginTop: '2em' }}
+              sx={{ marginTop: '2em', alignItems: 'center' }}
             >
-              <Grid2
+              <Grid
                 size={{
                   xs: 8,
                   sm: 8,
@@ -88,8 +87,8 @@ export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
                     },
                   }}
                 />
-              </Grid2>
-              <Grid2
+              </Grid>
+              <Grid
                 container
                 size={{
                   xs: 4,
@@ -119,8 +118,8 @@ export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
                     ° C
                   </ToggleButton>
                 </ToggleButtonGroup>
-              </Grid2>
-              <Grid2 size={12}>
+              </Grid>
+              <Grid size={12}>
                 <TextField
                   fullWidth
                   label="Calendar URL"
@@ -144,8 +143,8 @@ export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
                     },
                   }}
                 />
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
             <Box>
               <CalendarDirections webcalUrl={webcalUrl} />
             </Box>
@@ -166,8 +165,8 @@ export const UsersCalendar = ({ uid }: UsersCalendarProps) => {
             updating={updating}
           />
         </Box>
-      </Grid2>
-      <Grid2 size="grow"></Grid2>
-    </Grid2>
+      </Grid>
+      <Grid size="grow"></Grid>
+    </Grid>
   )
 }
