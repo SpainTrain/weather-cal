@@ -103,21 +103,24 @@ describe('forecast', () => {
     })
   })
 
-  it('rejects when calid is missing, without sending a response', async () => {
+  it('errors without sending a calendar when calid is missing', async () => {
     const res = {
       set: vi.fn(),
       send: vi.fn(),
       status: vi.fn().mockReturnThis(),
     }
 
-    // zod's parse throws synchronously inside the async handler, so the
-    // promise onRequest returns rejects rather than the error being caught.
-    await expect(
-      forecast(
-        { query: {} } as unknown as Request,
-        res as unknown as Response,
-      ),
-    ).rejects.toThrow()
-    expect(res.send).not.toHaveBeenCalled()
+    // Since firebase-functions v7, unhandled errors in async onRequest
+    // handlers are caught by the framework and answered with a 500 instead
+    // of propagating as a rejection.
+    await forecast(
+      { query: {} } as unknown as Request,
+      res as unknown as Response,
+    )
+    const sentCalendar = res.send.mock.calls.some(
+      (call) => typeof call[0] === 'string' && call[0].includes('BEGIN:VCALENDAR'),
+    )
+    expect(sentCalendar).toBe(false)
+    expect(res.status).toHaveBeenCalledWith(500)
   })
 })
