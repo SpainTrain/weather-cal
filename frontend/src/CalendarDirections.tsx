@@ -5,7 +5,7 @@ import {
   Box,
   Button,
   Divider,
-  Grid2,
+  Grid,
   InputAdornment,
   Link,
   List,
@@ -267,18 +267,18 @@ export const CalendarDirections = ({ webcalUrl }: CalendarDirectionsProps) => {
   ])
 
   return (
-    <Grid2
+    <Grid
       container
       spacing={2}
       sx={{
         marginTop: '2em',
       }}
     >
-      <Grid2 size="auto">
+      <Grid size="auto">
         <Typography variant="h6">Add to:</Typography>
-      </Grid2>
-      <Grid2 container size="grow">
-        <Grid2 size="auto">
+      </Grid>
+      <Grid container size="grow">
+        <Grid size="auto">
           <Button
             startIcon={<Google />}
             onClick={handleSelectGoogle}
@@ -286,8 +286,8 @@ export const CalendarDirections = ({ webcalUrl }: CalendarDirectionsProps) => {
           >
             Google Calendar
           </Button>
-        </Grid2>
-        <Grid2 size="auto">
+        </Grid>
+        <Grid size="auto">
           <Button
             startIcon={<Apple />}
             onClick={handleSelectApple}
@@ -295,8 +295,8 @@ export const CalendarDirections = ({ webcalUrl }: CalendarDirectionsProps) => {
           >
             iOS Apple Calendar
           </Button>
-        </Grid2>
-        <Grid2 size="auto">
+        </Grid>
+        <Grid size="auto">
           <Button
             startIcon={<Microsoft />}
             onClick={handleSelectOutlook}
@@ -304,9 +304,9 @@ export const CalendarDirections = ({ webcalUrl }: CalendarDirectionsProps) => {
           >
             Outlook Calendar
           </Button>
-        </Grid2>
-      </Grid2>
-      <Grid2 size={12}>
+        </Grid>
+      </Grid>
+      <Grid size={12}>
         <Accordion expanded={selectedDirections !== null}>
           {/* Hidden when unselected (empty Box) */}
           <Box></Box>
@@ -317,7 +317,7 @@ export const CalendarDirections = ({ webcalUrl }: CalendarDirectionsProps) => {
               : renderBySelection(lastSelectedCal)}
           </AccordionDetails>
         </Accordion>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   )
 }
