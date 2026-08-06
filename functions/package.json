@@ -22,7 +22,7 @@
     "ical-generator": "^8.1.1",
     "lodash": "^4.17.21",
     "openweather-api-node": "^3.1.5",
-    "zod": "^3.24.1"
+    "zod": "^4.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
