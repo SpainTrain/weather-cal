@@ -34,7 +34,34 @@ Keep the devtools console open throughout — it should stay clean.
    instructions; clicking again collapses; Copy shows "Copied", resets ~3s,
    clipboard contains the webcal URL. *(exercises MUI Accordion/Grid)*
 
+## Stage A½ — backend locally, before any deploy (~5 min)
+
+The `forecast` function runs fully locally: emulated Firestore (seeded with a
+test user), the real OpenWeather API via `functions/.secret.local`, and the
+real iCal serialization path. This catches real-API-shape surprises without
+touching production.
+
+**Requires Firebase CLI ≥ v14** — v13 rejects the `engines.node: 24` pin
+outright ("Valid versions are 20, 22") for emulation *and* deploy, so upgrade
+the global CLI (`npm i -g firebase-tools`) or use `npx firebase-tools@latest`.
+
+```bash
+cd functions && npm run build && cd ..
+firebase emulators:start --only functions,firestore,hosting
+
+# in a second terminal:
+cd functions && FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 node scripts/seed-emulator-user.mjs
+curl -s "http://localhost:5000/forecast?calid=local-test-user" | head -25
+```
+
+Expect `BEGIN:VCALENDAR`, ~8 all-day `VEVENT`s with emoji summaries for the
+seeded location (Boone NC), `GEO`/`LOCATION` fields, and the OpenWeather
+attribution in descriptions. This exercises everything Stage B's production
+curl does except the deployed runtime itself.
+
 ## Stage B — deploy functions, verify, then hosting (~10 min)
+
+Requires the same Firebase CLI ≥ v14 noted above.
 
 ```bash
 firebase deploy --only functions   # predeploy runs lint + build
