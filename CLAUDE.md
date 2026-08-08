@@ -25,7 +25,11 @@ Run inside the relevant package (`cd functions` or `cd frontend`):
 | `npm run build` | functions: `tsc` → `lib/` (gitignored); frontend: `tsc -b && vite build` |
 | `npm test` | fast Vitest suite, no emulator needed |
 | `npm run test:coverage` | coverage report (report-only, no thresholds) |
-| `npm --prefix frontend run test:rules` | Firestore rules suite — must run inside `firebase emulators:exec --only firestore "…"` from repo root |
+| `npm run test:rules` (repo root) | Firestore rules suite — wraps the frontend suite in `firebase emulators:exec` |
+
+The Firebase CLI is a **root devDependency** (root `package.json`,
+Renovate-managed) — use `npx firebase` or the root npm scripts
+(`emulators`, `test:rules`, `deploy*`); no global install.
 
 ## Workflow: everything through PR
 

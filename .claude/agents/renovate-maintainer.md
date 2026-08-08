@@ -45,8 +45,10 @@ first). Your job: process open Renovate PRs safely and report crisply.
   PRs together or expect install failures.
 - `@mui/material` majors: watch for Grid API renames — the
   `CalendarDirections` render test is the canary.
-- `firebase-tools` is pinned to major 13 inside `.github/workflows/ci.yml`
-  (not managed by Renovate); flag if the ecosystem moves past it.
+- `firebase-tools` is a root-package devDependency (Renovate-managed). Its
+  majors are usually mechanical, but the emulator/deploy surface is what
+  matters — the `rules` CI job is the functional test; historic gotcha:
+  v13 rejected `engines.node: 24` entirely.
 - `firebase-admin` / `firebase-functions` majors: the handler test covers the
   wiring, but read release notes for runtime/deploy changes the tests can't see.
 - Unused deps `openweather-api-node` and `firebase-functions-test`: updates to

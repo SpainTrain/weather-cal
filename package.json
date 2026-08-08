@@ -1,0 +1,14 @@
+{
+  "name": "weather-cal",
+  "private": true,
+  "scripts": {
+    "emulators": "firebase emulators:start",
+    "test:rules": "firebase emulators:exec --only firestore --project weather-cal-spainhower \"npm --prefix frontend run test:rules\"",
+    "deploy": "firebase deploy",
+    "deploy:functions": "firebase deploy --only functions",
+    "deploy:hosting": "firebase deploy --only hosting"
+  },
+  "devDependencies": {
+    "firebase-tools": "^15.25.1"
+  }
+}

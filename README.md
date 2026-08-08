@@ -28,7 +28,7 @@ cd frontend && npm ci && npm test
 The Firestore security rules have their own emulator-backed suite (requires Java and the Firebase CLI):
 
 ```
-firebase emulators:exec --only firestore "npm --prefix frontend run test:rules"
+npm ci && npm run test:rules   # repo root; Firebase CLI is a root devDependency
 ```
 
 CI runs lint, build, and tests for both packages plus the rules suite on every push and PR, so a green check on a Renovate PR means it's safe to merge.
