@@ -18,17 +18,14 @@ PRs Welcome!
 
 ## Development
 
-This repo has two independent npm packages: `functions/` and `frontend/`. Run tests with:
+The repo has three independent npm packages (root = Firebase CLI + scripts, `functions/`, `frontend/`) and uses [mise](https://mise.jdx.dev) for single-command workflows — it also provisions the pinned Node 24 and Java 21 (needed by the Firestore emulator):
 
 ```
-cd functions && npm ci && npm test
-cd frontend && npm ci && npm test
+mise trust && mise install   # once per clone
+mise run setup               # npm ci in all three packages
+mise run check               # everything CI checks: lint, build, all test suites
 ```
 
-The Firestore security rules have their own emulator-backed suite (requires Java and the Firebase CLI):
-
-```
-npm ci && npm run test:rules   # repo root; Firebase CLI is a root devDependency
-```
+`mise tasks` lists the rest (`test`, `test:rules`, `emulators`, `deploy*`). Without mise, the underlying npm equivalents work directly — see `mise.toml` for the mapping.
 
 CI runs lint, build, and tests for both packages plus the rules suite on every push and PR, so a green check on a Renovate PR means it's safe to merge.

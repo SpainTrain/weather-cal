@@ -17,7 +17,10 @@ packages — there is no root package.json, no workspaces:
 
 ## Commands
 
-Run inside the relevant package (`cd functions` or `cd frontend`):
+Single-command workflows via mise (`mise.toml` at root): `mise run setup`
+(all installs), `mise run check` (everything CI checks), `mise run test`,
+`test:rules`, `emulators`, `deploy*`. Per-package equivalents below — run
+inside the relevant package (`cd functions` or `cd frontend`):
 
 | Command | Notes |
 | --- | --- |
