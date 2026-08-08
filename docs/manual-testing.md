@@ -18,7 +18,7 @@ real Firebase project:
 
 ```bash
 cd frontend && npm run build && cd ..
-firebase emulators:start --only hosting    # open http://localhost:5000
+npx firebase emulators:start --only hosting    # open http://localhost:5000
 ```
 
 Keep the devtools console open throughout — it should stay clean.
@@ -41,13 +41,13 @@ test user), the real OpenWeather API via `functions/.secret.local`, and the
 real iCal serialization path. This catches real-API-shape surprises without
 touching production.
 
-**Requires Firebase CLI ≥ v14** — v13 rejects the `engines.node: 24` pin
-outright ("Valid versions are 20, 22") for emulation *and* deploy, so upgrade
-the global CLI (`npm i -g firebase-tools`) or use `npx firebase-tools@latest`.
+The Firebase CLI is a root devDependency (Renovate-managed; v13 and older
+reject the `engines.node: 24` pin). Run `npm ci` at the repo root once, then
+use `npx firebase` (or the root npm scripts) for all CLI commands.
 
 ```bash
 cd functions && npm run build && cd ..
-firebase emulators:start --only functions,firestore,hosting
+npx firebase emulators:start --only functions,firestore,hosting
 
 # in a second terminal:
 cd functions && FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 node scripts/seed-emulator-user.mjs
@@ -61,10 +61,8 @@ curl does except the deployed runtime itself.
 
 ## Stage B — deploy functions, verify, then hosting (~10 min)
 
-Requires the same Firebase CLI ≥ v14 noted above.
-
 ```bash
-firebase deploy --only functions   # predeploy runs lint + build
+npm run deploy:functions   # predeploy runs lint + build
 ```
 
 5. **The `.ics` endpoint** — this is exactly what calendar clients see. Get
@@ -89,7 +87,6 @@ firebase deploy --only functions   # predeploy runs lint + build
 
 - **Hosting:** Firebase console → Hosting → roll back to the previous release
   (one click).
-- **Functions:** `git checkout <previous-main-sha> && firebase deploy --only
-  functions`.
+- **Functions:** `git checkout <previous-main-sha> && npm run deploy:functions`.
 - Each dependency landed as its own commit on main, so `git log --oneline`
   gives a clean bisect trail for isolating a suspect bump.
