@@ -1,0 +1,47 @@
+[tools]
+node = "24"
+java = "temurin-21"
+
+[tasks.setup]
+description = "Install all dependencies (root CLI + functions + frontend)"
+run = [
+  "npm ci",
+  "npm --prefix functions ci",
+  "npm --prefix frontend ci",
+]
+
+[tasks.lint]
+description = "Lint both packages"
+run = ["npm --prefix functions run lint", "npm --prefix frontend run lint"]
+
+[tasks.build]
+description = "Build both packages"
+run = ["npm --prefix functions run build", "npm --prefix frontend run build"]
+
+[tasks.test]
+description = "Fast test suites, no emulator (120 tests)"
+run = ["npm --prefix functions test", "npm --prefix frontend test"]
+
+[tasks."test:rules"]
+description = "Firestore security-rules suite (starts the emulator)"
+run = "npm run test:rules"
+
+[tasks.check]
+description = "Everything CI checks: lint, build, tests, rules"
+depends = ["lint", "build", "test", "test:rules"]
+
+[tasks.emulators]
+description = "Start the full local emulator suite"
+run = "npm run emulators"
+
+[tasks."deploy:functions"]
+description = "Deploy functions only (predeploy runs lint+build)"
+run = "npm run deploy:functions"
+
+[tasks."deploy:hosting"]
+description = "Deploy hosting only (predeploy runs lint+build)"
+run = "npm run deploy:hosting"
+
+[tasks.deploy]
+description = "Deploy everything"
+run = "npm run deploy"
