@@ -1,6 +1,6 @@
 [tools]
 node = "24"
-java = "temurin-21"
+java = "temurin-21.0.12+101.0.LTS"
 
 [tasks.setup]
 description = "Install all dependencies (root CLI + functions + frontend)"
